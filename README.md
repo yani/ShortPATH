@@ -3,7 +3,7 @@ ShortPATH
 
 Create environment-wide shortcuts to run commands directly within the context of a chosen directory. Uses the PATH environment variable to add pipe commands that act as shortcuts to a directory of choice.
 
-The executable is portable and requires no administrative privileges. Shortcuts however are stored within AppData to make them persistent.
+The executable is portable and requires no administrative privileges. Shortcuts however are stored within the AppData directory to make them persistent.
 
 
 
@@ -41,4 +41,14 @@ C:\Users\Yani>
 ![ShortPATH Screenshot](https://i.imgur.com/X9evGf7.png)
 
 
+
+### Download
+
+https://github.com/yanikore/ShortPATH/releases
+
+
+
+### License
+
+This software is released under an MIT license.
 
