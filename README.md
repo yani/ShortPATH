@@ -50,5 +50,5 @@ https://github.com/yanikore/ShortPATH/releases
 
 ### License
 
-This software is released under an MIT license.
+This software is licensed under the MIT license.
 
