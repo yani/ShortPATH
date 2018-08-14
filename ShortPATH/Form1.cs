@@ -288,24 +288,36 @@ namespace ShortPATH
                 // Get the Shortcut from the list and update its properties, temporary Shortcuts are also stored in the list
                 Shortcut shortcut = shortcuts.ElementAt(index);
 
-                // Make sure the Shortcut does not exist yet by checking the ListBox
+                // If the identifier is new or has changed
                 if(shortcut.Identifier != textBox1.Text)
                 {
+                    // Make sure the Shortcut does not exist yet by checking the ListBox
                     if (listBox1.FindString(textBox1.Text) != -1)
                     {
                         MessageBox.Show("This shortcut identifier is already in use.", AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return;
                     }
-                }
 
-                // Check if the command is already in use (second parameter is the ignored Shortcut identifier)
-                if (CommandExistsInPATH(textBox1.Text, shortcut.Identifier))
-                {
-                    MessageBox.Show("The command \"" + textBox1.Text + "\" is already in use by the environment.",
-                        AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
+                    // Check if the identifier is already in use as a command
+                    if (CommandExistsInPATH(textBox1.Text))
+                    {
+                        MessageBox.Show("The command \"" + textBox1.Text + "\" is already in use by the environment.",
+                            AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
 
+                    // Check if the identifier is already in use as a directory
+                    string subdirectory_path = "";
+                    if (SubdirectoryExistsInPATH(textBox1.Text, out subdirectory_path))
+                    {
+                        MessageBox.Show("\"" + textBox1.Text + "\" matches directory \"" + subdirectory_path + 
+                            "\" and will therefor not work using the Windows Run Command dialog. " + 
+                            "The command will still be saved as it will still work from the command line.",
+                            AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                }
+                
                 // Shortcut object properties
                 shortcut.Identifier = textBox1.Text;
                 shortcut.Folder = textBox2.Text;
@@ -451,28 +463,24 @@ namespace ShortPATH
                 } else {
                     isValid = Path.IsPathRooted(path);
                 }
-            } catch (Exception ex) {
+            } catch (Exception exception) {
+
+                Console.WriteLine("Valid directory check exception: {0}", exception.ToString());
                 isValid = false;
             }
 
             return isValid;
         }
 
-        // Check if the given string can already be used as a command
-        private bool CommandExistsInPATH(string possibleCommand, string ignoredIdentifier = null)
+        // Check if the given string is available to be used as a command
+        private bool CommandExistsInPATH(string possibleCommand)
         {
-            string PATH = System.Environment.GetEnvironmentVariable("PATH");
-            string[] paths = PATH.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // See if our directory is present
-            foreach (string path in paths)
+            foreach (string path in GetPATHDirectories())
             {
                 string currentDirectoryPath = path.Trim(new[] { '\\', '/' });
 
                 if(currentDirectoryPath != DirectoryPath)
                 {
-                    // https://stackoverflow.com/a/50856314/5865844
-                    //foreach (var fileExtension in new[] { "exe", "bat", "cmd", "msi" })
                     foreach (var fileExtension in CommandFileExtensions)
                     {
                         string filePath = currentDirectoryPath + "\\" + possibleCommand + "." + fileExtension;
@@ -485,6 +493,38 @@ namespace ShortPATH
             }
             
             return false;
+        }
+
+        // Check if a given string is a subdirectory in the PATH environment variable
+        private bool SubdirectoryExistsInPATH(string possibleSubdirectory, out string foundSubdirectory)
+        {
+            foundSubdirectory = "";
+
+            foreach (string path in GetPATHDirectories())
+            {
+                string currentDirectoryPath = path.Trim(new[] { '\\', '/' });
+
+                if (currentDirectoryPath != DirectoryPath)
+                {
+                    string directoryPath = currentDirectoryPath + "\\" + possibleSubdirectory;
+                    if (Directory.Exists(directoryPath))
+                    {
+                        foundSubdirectory = directoryPath;
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        
+        // Get a list of directories in the PATH environment variable
+        private string[] GetPATHDirectories()
+        {
+            string PATH = System.Environment.GetEnvironmentVariable("PATH");
+            string[] directories = PATH.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            return directories;
         }
     }
 }
