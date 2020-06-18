@@ -3,7 +3,13 @@ ShortPATH
 
 Create environment-wide shortcuts to run commands directly within the context of a chosen directory. Uses the PATH environment variable to add pipe commands that act as shortcuts to a directory of choice.
 
-The executable is portable and requires no administrative privileges. Shortcuts however are stored within the AppData directory to make them persistent.
+The executable is portable and requires no administrative privileges. The shortcuts are stored within the AppData directory to make them persistent.
+
+
+
+### Screenshot
+
+![ShortPATH Screenshot](https://i.imgur.com/X9evGf7.png)
 
 
 
@@ -12,10 +18,8 @@ The executable is portable and requires no administrative privileges. Shortcuts 
 `etc` is mapped to `C:\Windows\System32\drivers\etc`
 
 ```
-Microsoft Windows [Version 10.0.17134.165]
-(c) 2018 Microsoft Corporation. All rights reserved.
-
 C:\Users\Yani>etc dir
+
  Volume in drive C has no label.
  Volume Serial Number is 1234-5678
 
@@ -31,14 +35,7 @@ C:\Users\Yani>etc dir
                5 File(s)         25,375 bytes
                2 Dir(s)  15,289,909,248 bytes free
 
-C:\Users\Yani>
 ```
-
-
-
-### Screenshot
-
-![ShortPATH Screenshot](https://i.imgur.com/X9evGf7.png)
 
 
 
