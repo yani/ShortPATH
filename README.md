@@ -1,8 +1,8 @@
 # ShortPATH
 
-Create environment-wide shortcuts to run commands directly within the context of a chosen directory. Uses the PATH environment variable to add pipe commands that act as shortcuts to a directory of choice.
+Create environment-wide shortcuts on **Windows** to run commands directly within the context of a chosen directory. Uses the PATH environment variable to add pipe commands that act as shortcuts to a directory of choice.
 
-The executable is portable and requires no administrative privileges. The shortcuts are stored within the AppData directory to make them persistent.
+The executable is portable and requires no administrative privileges. Shortcuts are stored within the AppData directory to make them persistent.
 
 
 
@@ -14,7 +14,11 @@ The executable is portable and requires no administrative privileges. The shortc
 
 ## Example
 
-`etc` is mapped to `C:\Windows\System32\drivers\etc`
+The `etc` shortcut is mapped to `C:\Windows\System32\drivers\etc`
+
+We can now run commands like this: `etc <command> <arguments>`.
+
+Example output for `etc dir`:
 
 ```
 C:\Users\Yani>etc dir
@@ -34,6 +38,26 @@ C:\Users\Yani>etc dir
                5 File(s)         25,375 bytes
                2 Dir(s)  15,289,909,248 bytes free
 
+```
+
+
+
+## How it works
+
+The application is just a front-end for managing shortcut .bat files.
+When it's first ran, a directory in appdata is created and its path is added to the PATH environment variable.
+
+Now when you run a command in your console, the new directory is checked for executable files.
+Because our shortcuts are saved as `<shortcut>.bat`, the shortcut acts as an executable and uses 
+all other arguments as a new command in the directory the shortcut points to.
+
+The shortcut file that is created looks like this:
+```
+@echo off
+SET org_dir=%cd%
+cd /d "<project-directory>"
+%*
+cd /d "%org_dir%\"
 ```
 
 
