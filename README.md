@@ -1,5 +1,4 @@
-ShortPATH
-=========
+# ShortPATH
 
 Create environment-wide shortcuts to run commands directly within the context of a chosen directory. Uses the PATH environment variable to add pipe commands that act as shortcuts to a directory of choice.
 
@@ -7,13 +6,13 @@ The executable is portable and requires no administrative privileges. The shortc
 
 
 
-### Screenshot
+## Screenshot
 
 ![ShortPATH Screenshot](https://i.imgur.com/X9evGf7.png)
 
 
 
-### Example
+## Example
 
 `etc` is mapped to `C:\Windows\System32\drivers\etc`
 
@@ -39,13 +38,13 @@ C:\Users\Yani>etc dir
 
 
 
-### Download
+## Download
 
-https://github.com/yanikore/ShortPATH/releases
+https://github.com/yani/ShortPATH/releases
 
 
 
-### License
+## License
 
 This software is licensed under the MIT license.
 
